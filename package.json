@@ -1,0 +1,16 @@
+{
+  "name": "takeaway-theft-reporter",
+  "version": "1.0.0",
+  "description": "外卖被偷情况收集网站",
+  "main": "api/submit.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:vercel": "vercel dev"
+  },
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  },
+  "devDependencies": {
+    "vercel": "^33.0.0"
+  }
+}
