@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM docker.xuanyuan.run/node:22-alpine
 
 WORKDIR /app
 ENV NODE_ENV=production
