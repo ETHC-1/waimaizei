@@ -37,9 +37,11 @@ takeaway-theft/
 
 ### 第3步：配置环境变量
 
-复制 `.env.example` 为 `.env`（生产环境请在云平台控制台配置，不要提交 `.env`），至少设置：
+复制 `.env.example` 为 `.env`（生产环境请只在服务器配置，不要提交 `.env`），至少设置：
 
-- `MONGODB_URI`：MongoDB Atlas 连接字符串
+- `MONGO_ROOT_USERNAME`：MongoDB 管理员用户名
+- `MONGO_ROOT_PASSWORD`：MongoDB 管理员密码，建议只使用字母和数字
+- `MONGODB_URI`：容器内 MongoDB 连接字符串
 - `ADMIN_PASSWORD`：后台登录密码
 - `ADMIN_SESSION_SECRET`：至少 32 位随机字符串，用于签发后台会话
 
@@ -96,13 +98,13 @@ https://takeaway-theft-reporter.vercel.app
 
 1. 安装 Docker 和 Docker Compose
 2. 将项目文件上传到服务器
-3. 复制 `.env.example` 为 `.env`，填入三个生产环境变量
+3. 复制 `.env.example` 为 `.env`，填入 MongoDB 和管理员环境变量
 4. 执行 `docker compose up -d --build`
 5. 确认 `http://服务器IP:3000/healthz` 返回 `{"status":"ok"}`
 6. 将 `deploy/nginx.conf` 放入 Nginx 配置目录，把域名替换为实际域名
 7. 使用 Certbot 为域名配置 HTTPS，并确认安全组放行 80/443
 
-应用容器只暴露给本机反向代理，不直接映射公网端口；MongoDB 建议继续使用 MongoDB Atlas，并限制数据库访问来源。
+应用容器只暴露给本机反向代理，不直接映射公网端口；MongoDB 也只存在于 Docker 内部网络，不要开放公网 `27017` 端口。MongoDB 数据保存在 `mongo-data` 持久化卷中，仍需定期备份到服务器之外。
 
 ## 技术栈
 

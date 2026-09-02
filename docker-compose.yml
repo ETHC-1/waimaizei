@@ -7,6 +7,9 @@ services:
     environment:
       PORT: 3000
       NODE_ENV: production
+    depends_on:
+      mongo:
+        condition: service_healthy
     expose:
       - "3000"
     healthcheck:
@@ -14,3 +17,20 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongo-data:
